@@ -15,6 +15,7 @@ create table if not exists categories (
 
 alter table categories enable row level security;
 
+drop policy if exists "owner access" on categories;
 create policy "owner access" on categories
   for all using (auth.uid() = user_id);
 
@@ -35,6 +36,7 @@ create table if not exists entries (
 
 alter table entries enable row level security;
 
+drop policy if exists "owner access" on entries;
 create policy "owner access" on entries
   for all using (auth.uid() = user_id);
 
@@ -63,6 +65,7 @@ begin
 end;
 $$;
 
+drop trigger if exists entries_updated_at on entries;
 create trigger entries_updated_at
   before update on entries
   for each row execute procedure touch_updated_at();
